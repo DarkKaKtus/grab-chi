@@ -1,14 +1,17 @@
-// server.js
-
 const express = require('express');
 const cors = require('cors');
-const ytdlp = require('yt-dlp-exec'); // ← теперь правильно!
+const path = require('path');
+const ytdlp = require('yt-dlp-exec');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 
+// 👉 Обслуживаем статические файлы из public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 👉 API маршрут
 app.get('/api/grab', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: 'missing url' });
@@ -34,6 +37,11 @@ app.get('/api/grab', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// 👉 Фоллбэк на index.html для других маршрутов (если нужен SPA)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => console.log('API on :' + PORT));
