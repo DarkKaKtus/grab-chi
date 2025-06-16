@@ -1,23 +1,21 @@
-/* --------- imports (CommonJS) --------- */
-const express       = require('express');
-const cors          = require('cors');
-const ytDlpWrap     = require('yt-dlp-exec').ytDlpWrap; // ← правильный экспорт
+// server.js
 
-/* --------- инициализация -------------- */
-const app   = express();
-const ytdlp = ytDlpWrap();                 // теперь это ФУНКЦИЯ
-const PORT  = process.env.PORT || 8080;
+const express = require('express');
+const cors = require('cors');
+const ytdlp = require('yt-dlp-exec'); // ← теперь правильно!
+
+const app = express();
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 
-/* --------- API ------------------------ */
 app.get('/api/grab', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: 'missing url' });
 
   try {
     const info = JSON.parse(
-      await ytdlp.execPromise([url, '-J', '--no-playlist', '--no-warnings'])
+      await ytdlp(url, ['-J', '--no-playlist', '--no-warnings'])
     );
 
     const best = (info.formats || [])
@@ -38,5 +36,4 @@ app.get('/api/grab', async (req, res) => {
   }
 });
 
-/* --------- запуск --------------------- */
 app.listen(PORT, () => console.log('API on :' + PORT));
