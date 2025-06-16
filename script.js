@@ -149,7 +149,7 @@ function flash(el){
   const tip = el.querySelector('.lvl-tip');
   tip.classList.add('show');
   clearTimeout(tip.hideT);
-  tip.hideT = setTimeout(()=>tip.classList.remove('show'), 900);
+  tip.hideT = setTimeout(()=>tip.classList.remove('show'), 2000); // 2 000 мс
 
   /* 3. волна (если была) */
   el.classList.add('playing');
@@ -160,7 +160,7 @@ function flash(el){
   clearTimeout(el.dropT);               // cбиваем старый таймер, если был
   el.dropT = setTimeout(()=>{
     el.style.setProperty('--prog', 0);  // плавно спустится тем же transition
-  }, 1000);                             // ← 1 000 мс
+  }, 2000);                             // ← 1 000 мс
 }
 
 
