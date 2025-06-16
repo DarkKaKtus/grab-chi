@@ -39,20 +39,12 @@ grabForm.addEventListener('submit', async e=>{
   // предпросмотр
   renderPreview(link);
 
-feedback.innerHTML = `
-  <div class="alert alert-success mt-2">
-    <b>${data.filename}</b> (${(data.width||'')+'x'+(data.height||'')})
-    — <a class="alert-link" href="/api/download?url=${encodeURIComponent(data.download)}&filename=${encodeURIComponent(data.filename)}">
-        скачать
-      </a>
-  </div>`;
-
   try{
     const res  = await fetch(`${API_BASE}/api/grab?url=`+encodeURIComponent(link));
     const data = await res.json();
     if(data.error) throw new Error(data.error);
 
-    /* показываем результат */
+    /* показываем результат после успешного запроса */
     feedback.innerHTML = `
       <div class="alert alert-success mt-2">
         <b>${data.filename}</b> (${(data.width||'')+'x'+(data.height||'')})
@@ -66,3 +58,4 @@ feedback.innerHTML = `
     </div>`;
   }
 });
+
