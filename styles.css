@@ -1,0 +1,82 @@
+/* ---------- глобалка ---------- */
+:root{
+  --bg-1: #020b02;
+  --bg-2: #051605;
+  --neon: #00ff7b;
+  --neon-soft: rgba(0,255,123,.15);
+  --glass-border: rgba(0,255,123,.25);
+}
+
+html,body{
+  font-family: 'Minecraftia', monospace;
+  background: radial-gradient(circle at 50% 0, var(--bg-2) 0%, var(--bg-1) 100%);
+  color: #a5ffcb;
+}
+
+/* ссылки */
+a{ color:var(--neon); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+/* «стеклянные» блоки */
+.glass{
+  background: rgba(0,30,0,.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: .75rem;
+}
+
+/* neon-кнопка */
+.btn-neon{
+  background: var(--neon);
+  color:#020b02;
+  border:none;
+  position:relative;
+  font-weight:900;
+  box-shadow: 0 0 8px var(--neon), 0 0 18px var(--neon);
+}
+.btn-neon:hover{ filter:brightness(1.1); }
+.btn-neon:active{ box-shadow:none; transform:translateY(1px); }
+
+/* пульсация кнопки при фокусе */
+@keyframes pulse{
+  0%  { box-shadow:0 0 0 0 var(--neon-soft); }
+  70% { box-shadow:0 0 0 25px rgba(0,255,123,0); }
+  100%{ box-shadow:0 0 0 0 rgba(0,255,123,0); }
+}
+.btn-download:focus-visible{
+  animation:pulse 1.5s cubic-bezier(.66,0,0,1) infinite;
+}
+
+/* мигающий курсор в логотипе */
+.blink{
+  animation:blink 1s steps(2,start) infinite;
+}
+@keyframes blink{
+  to{ visibility:hidden; }
+}
+
+/* встроенный iframe / картинка */
+.ratio{
+  border: 1px solid var(--glass-border);
+  border-radius:.5rem;
+  overflow:hidden;
+}
+
+/* alert-ы в green matrix-стиле */
+.alert{
+  font-family:inherit;
+  border:1px solid var(--glass-border);
+  background:rgba(0,40,0,.4);
+  color:var(--neon);
+}
+.alert-link{ color:#fff; font-weight:700; }
+.alert-info   { color:#b4ffda; }
+.alert-danger { color:#ff6f6f; }
+.alert-success{ color:#00ff7b; }
+
+/* скролл-бар под тёмную тему */
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{
+  background:var(--neon-soft);
+  border-radius:4px;
+}
