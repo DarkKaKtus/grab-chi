@@ -8,7 +8,6 @@
   --glass-brd:rgba(0,255,0,.15);
 }
 body{
-  background:linear-gradient(145deg,var(--bg1),var(--bg2));
   color:#cfffce;
   font-family: 'Share Tech Mono', monospace;
   background-color: #000; /* фон, если нужно */
@@ -63,10 +62,13 @@ body{
 .typewriter {
   overflow: hidden;
   border-right: 0.15em solid #00ff00;
-  white-space: nowrap;
   width: 0;
   animation: typing 3s steps(30, end) forwards;
+    font-size:clamp(1.4rem, 8vw, 2rem);   /* 8 vw на телефоне, максимум 2 rem */
+  white-space:normal !important;    
 }
+
+
 
 #scanner{
   position:absolute;
@@ -196,3 +198,16 @@ body{
 
 #stars{pointer-events:none;z-index:-1;}
 
+/* — базовый flex уже есть от .row g-2 — */
+@media (max-width: 575.98px){
+  #pianoWrap{
+    flex-wrap:nowrap;           /* не переносим */
+    overflow-x:auto;            /* свайп-скролл */
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:.6rem;       /* чтобы палец не перекрывал */
+  }
+  #pianoWrap .skill-key{
+    flex:0 0 calc(33.33vw - .6rem);  /* три на экран с учётом gap-ов */
+    aspect-ratio:2/5;                /* чуть короче */
+  }
+}
