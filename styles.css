@@ -171,15 +171,16 @@ body{
   top:0; left:50%;
   transform:translate(-50%, -110%);   /* сдвигаем вверх на 110 % высоты подсказки */
   font:600 12px/1 'Share Tech Mono', monospace;
-  color:#fff;
-  background:#0d0d0d;
   padding:2px 6px;
   border-radius:.25rem;
   box-shadow:0 0 6px rgba(0,0,0,.45);
   opacity:0;
   transition:opacity .2s;
   pointer-events:none;
-  z-index:5;                          /* поверх волн, градиентов и т.д. */
+  z-index:5;                   
+  color: var(--clr);                   /* цифра = цвет стека */
+  background: color-mix(in srgb, var(--clr) 15%, #0d0d0d);  /* лёгкий оттенок */
+  border: 1px solid currentColor;         /* поверх волн, градиентов и т.д. */
 }
 
 .lvl-tip.show{ opacity:1; }
