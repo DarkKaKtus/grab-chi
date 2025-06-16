@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -7,11 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
-
-// 👉 Обслуживаем статические файлы из public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 👉 API маршрут
 app.get('/api/grab', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: 'missing url' });
@@ -29,7 +27,7 @@ app.get('/api/grab', async (req, res) => {
 
     res.json({
       filename:  (info.title || 'download') + '.' + best.ext,
-      download:  best.url,
+      download:  `/api/proxy?url=${encodeURIComponent(best.url)}`,
       thumbnail: info.thumbnail,
       width:     best.width,
       height:    best.height
@@ -39,7 +37,23 @@ app.get('/api/grab', async (req, res) => {
   }
 });
 
-// 👉 Фоллбэк на index.html для других маршрутов (если нужен SPA)
+// Прокси-обработчик, чтобы обойти CORS и отдавать видео через сервер
+app.get('/api/proxy', async (req, res) => {
+  const videoUrl = req.query.url;
+  if (!videoUrl) return res.status(400).send('Missing video URL');
+
+  try {
+    const response = await fetch(videoUrl);
+    if (!response.ok) throw new Error('Failed to fetch video');
+
+    res.setHeader('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
+    res.setHeader('Content-Disposition', 'attachment');
+    response.body.pipe(res);
+  } catch (err) {
+    res.status(500).send('Error: ' + err.message);
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

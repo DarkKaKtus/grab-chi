@@ -39,11 +39,13 @@ grabForm.addEventListener('submit', async e=>{
   // предпросмотр
   renderPreview(link);
 
-  feedback.innerHTML = `
-    <div class="alert alert-info mt-2">
-      <i class="spinner-border spinner-border-sm me-2"></i>
-      Ищем прямую ссылку…
-    </div>`;
+feedback.innerHTML = `
+  <div class="alert alert-success mt-2">
+    <b>${data.filename}</b> (${(data.width||'')+'x'+(data.height||'')})
+    — <a class="alert-link" href="/api/download?url=${encodeURIComponent(data.download)}&filename=${encodeURIComponent(data.filename)}">
+        скачать
+      </a>
+  </div>`;
 
   try{
     const res  = await fetch(`${API_BASE}/api/grab?url=`+encodeURIComponent(link));
