@@ -45,13 +45,13 @@ grabForm.addEventListener('submit', async e=>{
     if(data.error) throw new Error(data.error);
 
     /* показываем результат после успешного запроса */
-    feedback.innerHTML = `
-      <div class="alert alert-success mt-2">
-        <b>${data.filename}</b> (${(data.width||'')+'x'+(data.height||'')})
-        — <a class="alert-link" href="${data.download}" download="${data.filename}">
-            скачать
-          </a>
-      </div>`;
+/* в success-блоке */
+const proxy = `${API_BASE}${data.download}`;
+feedback.innerHTML = `
+  <div class="alert alert-success mt-2">
+    <b>${data.filename}</b> —
+    <a class="alert-link" href="${proxy}" download="${data.filename}">скачать</a>
+  </div>`;
   }catch(err){
     feedback.innerHTML = `<div class="alert alert-danger mt-2">
       Ошибка: ${err.message}
