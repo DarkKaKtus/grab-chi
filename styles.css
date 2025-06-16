@@ -199,15 +199,21 @@ body{
 #stars{pointer-events:none;z-index:-1;}
 
 /* — базовый flex уже есть от .row g-2 — */
+/* ────────────────── мобильный брейк-пойнт ────────────────── */
 @media (max-width: 575.98px){
+  /* превращаем #pianoWrap во grid-контейнер 3×N */
   #pianoWrap{
-    flex-wrap:nowrap;           /* не переносим */
-    overflow-x:auto;            /* свайп-скролл */
-    -webkit-overflow-scrolling:touch;
-    padding-bottom:.6rem;       /* чтобы палец не перекрывал */
+    display:grid !important;           /* переопределяем .row (flex)   */
+    grid-template-columns:repeat(3, 1fr);
+    gap: .5rem;                        /* тот же g-2, чтобы визуально совпадало */
+    justify-content:center;            /* центрируем, если клавиш < 3 */
+    overflow:visible;                  /* убираем горизонтальный скролл */
   }
+  
+  /* каждая клавиша тянется на всю ячейку грида */
   #pianoWrap .skill-key{
-    flex:0 0 calc(33.33vw - .6rem);  /* три на экран с учётом gap-ов */
-    aspect-ratio:2/5;                /* чуть короче */
+    width:100%;                        /* 1fr = calc(…) уже не нужен   */
+    flex:none !important;              /* отменяем flex-правила        */
+    aspect-ratio: 2 / 5;               /* чуть короче, чтобы 2 ряда влезло */
   }
 }
