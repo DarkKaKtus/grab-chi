@@ -1,28 +1,31 @@
+/* ─────────── backend/server.js (CommonJS) ─────────── */
 const path    = require('path');
 const express = require('express');
 const cors    = require('cors');
-const ytdlp   = require('yt-dlp-exec');        // ← default export-функция
+const fetch   = (...args) => import('node-fetch').then(m => m.default(...args));
+const { exec: ytdlp } = require('yt-dlp-exec');   // ← exec, НЕ execPromise
 
 const app  = express();
 const PORT = process.env.PORT || 8080;
 
-/* статические файлы + cors */
+/* ── middleware ───────────────────────────────────── */
 app.use(cors({ origin: '*' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ---------- /api/grab ---------- */
+/* ── /api/grab ─────────────────────────────────────── */
 app.get('/api/grab', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: 'missing url' });
 
   try {
-    const raw  = await ytdlp.execPromise([
-      url,
-      '-J',
-      '--no-playlist',
-      '--no-warnings'
-    ]);
-    const info = JSON.parse(raw);
+    /* yt-dlp отдаёт JSON-паспорт ролика без скачивания */
+    const raw = await ytdlp(url, {
+      dumpSingleJson: true,
+      noPlaylist:      true,
+      noWarnings:      true
+    });
+
+    const info = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
     const best = (info.formats || [])
       .filter(f => f.filesize && f.ext !== 'webm')
@@ -42,7 +45,7 @@ app.get('/api/grab', async (req, res) => {
   }
 });
 
-/* ---------- /api/proxy ---------- */
+/* ── /api/proxy ───────────────────────────────────── */
 app.get('/api/proxy', async (req, res) => {
   const src  = req.query.url;
   const name = req.query.name || 'download';
@@ -56,18 +59,17 @@ app.get('/api/proxy', async (req, res) => {
       r.headers.get('content-type') || 'application/octet-stream');
     res.setHeader('Content-Disposition',
       `attachment; filename="${name}"`);
-
-    r.body.pipe(res);               // стримим клиенту
+    r.body.pipe(res);
   } catch (e) {
     console.error(e);
     res.status(500).send('Proxy error: ' + e.message);
   }
 });
 
-/* fallback для SPA */
+/* ── SPA fallback ─────────────────────────────────── */
 app.get('*', (_, res) =>
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 );
 
-/* запуск */
+/* ── start ────────────────────────────────────────── */
 app.listen(PORT, () => console.log('API on :' + PORT));
