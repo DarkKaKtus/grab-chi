@@ -1,10 +1,18 @@
 import express         from 'express';
 import { ytDlpWrap }   from 'yt-dlp-exec';
 import cors            from 'cors';
+import pkg from 'yt-dlp-exec';
+const { ytDlpWrap } = pkg;      // ← достаём из default
+
+import express from 'express';
+import cors    from 'cors';
 
 const app   = express();
 const ytdlp = ytDlpWrap();
 const PORT  = process.env.PORT || 8080;
+
+/* ... остальной код без изменений ... */
+
 
 app.use(cors()); // GitHub-Pages фронт сможет достучаться
 
