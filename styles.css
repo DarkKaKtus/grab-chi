@@ -98,45 +98,10 @@ body{
 .fade-in.show{opacity:1!important;transform:none!important}
 
 
-/* светлая альтернатива — на системной светлой теме */
-@media (prefers-color-scheme: light){
-  :root{
-    --neo:#008800;
-    --bg1:#e9ffe8;
-    --bg2:#d9fcd8;
-    --glass-bg:rgba(0,136,0,.05);
-    --glass-brd:rgba(0,136,0,.15);
-  }
-  body{color:#024402}
-}
-
 /* мелочь для repo-карточек */
 .repo-card{transition:transform .2s cubic-bezier(.4,0,.2,1);
            will-change:transform}
 
-:root[data-theme='light']{
-  --neo:#008800;
-  --bg1:#f4fff4;
-  --bg2:#e9ffe8;
-  --glass-bg:rgba(0,136,0,.06);
-  --glass-brd:rgba(0,136,0,.15);
-  color:#013301;
-}
-/* фон и текст */
-[data-theme='light'] body{
-  background:linear-gradient(145deg,var(--bg1),var(--bg2));
-  color:inherit;
-}
-/* чуть приглушаем матрицу, чтобы не слепила */
-[data-theme='light'] #matrix{opacity:.08}
-/* кнопки-нео в светлой версии */
-[data-theme='light'] .btn-neo{
-  --bs-btn-color:var(--neo);
-  --bs-btn-border-color:var(--neo);
-}
-[data-theme='light'] .btn-neo:hover{
-  background:var(--neo);color:#fff;
-}
 
 
 #pianoWrap{display:flex;gap:.4rem}
